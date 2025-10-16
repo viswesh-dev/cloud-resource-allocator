@@ -26,12 +26,8 @@ The core of the simulation is the **Greedy Scheduling Algorithm**, which priorit
 
 2.  **Ratio Calculation**: For each request, an efficiency **ratio** is calculated. A higher ratio indicates a more efficient request (higher priority for fewer resources).
 
-    $$
-    $$$$\\text{Ratio} = \\frac{\\text{Priority}}{\\text{CPU} + \\text{Memory} + \\text{Bandwidth}}
+ <img width="811" height="154" alt="image" src="https://github.com/user-attachments/assets/fbf016b8-15ff-4f4f-b43d-703568a2d129" />
 
-    $$
-    $$$$
-    $$
 3.  **Sorting**: The list of incoming requests is sorted in descending order based on this ratio.
 
 4.  **Allocation**: The `GreedyScheduler` iterates through the sorted list. For each request, it checks if the `ResourceManager` has enough available resources.
