@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Resource Allocation Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cloud Resource Allocation Simulator</h1>
+            <p>A demonstration of a greedy scheduling algorithm.</p>
+            <button id="run-sim-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M5.536 21.886a1.004 1.004 0 0 0 1.033-.064l13-9a1 1 0 0 0 0-1.644l-13-9A1 1 0 0 0 5 3v18a1 1 0 0 0 .536.886z"></path></svg>
+                Run Simulation
+            </button>
+        </header>
+
+        <main id="results-container" class="hidden">
+            <div class="card chart-card">
+                <h2>Resource Utilization</h2>
+                <div class="chart-wrapper">
+                    <canvas id="utilization-chart"></canvas>
+                </div>
+            </div>
+            <div class="card summary-card">
+                <h2>Execution Summary</h2>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 20h2v-2h-2v2zm-2-2h-2v2h2v-2zm4 0v2h2v-2h-2zm-6-2h-2v2h2v-2zm8 0v2h2v-2h-2zm-1-5.917V4h-6v6.083A8.974 8.974 0 0 0 4 19h16a8.974 8.974 0 0 0-7-8.917zM11 6h2v2h-2V6zm-2 2H7V6h2v2zm4 0V6h2v2h-2zM7 12h2v-2H7v2zm4 0v-2h2v2h-2zm4 0h-2v-2h2v2zm-6 2H7v2h2v-2zm4 0v2h2v-2h-2zM5 0h14a1 1 0 0 1 1 1v22a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V1a1 1 0 0 1 1-1zm13 2H6v20h12V2z"></path></svg>
+                        </span>
+                        <div>
+                            <p class="summary-label">CPU</p>
+                            <p class="summary-value" id="cpu-summary">-- / --</p>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <span class="icon">
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 4H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1zM5 18H4v-2h1v2zm2 0H6v-2h1v2zm2 0H8v-2h1v2zm2 0h-1v-2h1v2zm9-2h-7V6h7v10z"></path></svg>
+                        </span>
+                        <div>
+                            <p class="summary-label">Memory</p>
+                            <p class="summary-value" id="mem-summary">-- / --</p>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <span class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.001 2.003c-5.517 0-10 4.483-10 10.001s4.483 10 10 10 10-4.484 10-10.001-4.483-10-10-10zm0 18c-4.411 0-8-3.589-8-8.001s3.589-8 8-8 8 3.588 8 8.001-3.589 8-8 8z"></path><path d="M12.001 7.003c-2.756 0-5 2.245-5 5.001s2.244 5 5 5 5-2.245 5-5.001-2.244-5-5-5zm0 8c-1.654 0-3-1.346-3-3.001s1.346-3 3-3 3 1.346 3 3.001-1.346 3-3 3z"></path><path d="M12.004 9.034c-1.636 0-2.96 1.326-2.96 2.961s1.324 2.961 2.96 2.961 2.96-1.326 2.96-2.961-1.324-2.961-2.96-2.961zm0 4.922c-1.082 0-1.96-0.878-1.96-1.961s0.878-1.961 1.96-1.961 1.96 0.878 1.96 1.961-0.878 1.961-1.96 1.961z"></path></svg>
+                        </span>
+                        <div>
+                            <p class="summary-label">Bandwidth</p>
+                            <p class="summary-value" id="bw-summary">-- / --</p>
+                        </div>
+                    </div>
+                </div>
+                <h3>Rejected Users</h3>
+                <div id="rejected-users-list">
+                    <p class="placeholder-text">None</p>
+                </div>
+            </div>
+            
+            <div class="card incoming-card">
+                <h2>Incoming Requests</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th><th>CPU</th><th>Mem</th><th>BW</th><th>Prio</th><th>Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="incoming-requests-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card allocated-card">
+                <h2>Allocated Requests</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th><th>CPU</th><th>Mem</th><th>BW</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allocated-requests-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

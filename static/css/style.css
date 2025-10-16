@@ -1,0 +1,190 @@
+/* static/css/style.css */
+:root {
+    --bg-color: #111827;
+    --card-bg: rgba(31, 41, 55, 0.5);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --accent-blue: #3b82f6;
+    --accent-blue-hover: #2563eb;
+    --accent-red: #ef4444;
+    --font-family: 'Inter', sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-color);
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size: 20px 20px;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 3rem;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+}
+
+header p {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    margin-top: 0;
+}
+
+#run-sim-btn {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+#run-sim-btn:hover {
+    background: var(--accent-blue-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+}
+
+#run-sim-btn svg { width: 20px; height: 20px; }
+
+main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+main.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.card h2, .card h3 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+.card h3 { font-size: 1rem; margin-top: 1.5rem; margin-bottom: 1rem; }
+
+.chart-wrapper {
+    position: relative;
+    min-height: 280px;
+}
+
+.summary-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.summary-item { display: flex; align-items: center; gap: 1rem; }
+.summary-label { margin: 0; color: var(--text-secondary); font-size: 0.875rem; }
+.summary-value { margin: 0; font-size: 1.25rem; font-weight: 600; }
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Prevents icon from shrinking */
+}
+
+/* New rule to style the SVG inside the icon container */
+.icon svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--text-secondary); /* Use theme color for the icon */
+}
+
+#rejected-users-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.user-tag {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+.placeholder-text { color: var(--text-secondary); font-style: italic; font-size: 0.875rem; }
+
+.table-wrapper { max-height: 280px; overflow-y: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 0.75rem; text-align: left; font-size: 0.9rem; }
+thead th {
+    position: sticky; top: 0;
+    background: rgba(31, 41, 55, 0.8);
+    backdrop-filter: blur(5px);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+}
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+tbody tr:hover { background-color: rgba(255,255,255,0.03); }
+
+/* Scrollbar styling for a modern look */
+.table-wrapper::-webkit-scrollbar { width: 6px; }
+.table-wrapper::-webkit-scrollbar-track { background: transparent; }
+.table-wrapper::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 3px; }
+.table-wrapper::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+
+/* ADD THIS TO THE END OF YOUR CSS FILE */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
