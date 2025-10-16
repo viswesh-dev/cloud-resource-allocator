@@ -109,7 +109,3 @@ To run this project on your local machine, follow these steps:
 ```
 
 -----
-
-## 🪪 License
-
-This project is licensed under the **MIT License**. You are free to use, modify, and distribute it with attribution.
